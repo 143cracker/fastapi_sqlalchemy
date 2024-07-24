@@ -1,0 +1,69 @@
+if we are missing anything go ahead -->https://www.youtube.com/watch?v=KWIIPKbdxD0&ab_channel=TonyTeachesTech
+#run application using gunicorn by commond
+gunicorn {application:app} -k uvicorn.workers.UvicornWorker
+
+#create backend service file
+sudo nano /etc/systemd/system/{fastapi_demo.service}
+
+
+ sudo systemctl start {fastapi_demo}
+ sudo systemctl enable {fastapi_demo}
+To verify if everything works run the following command.
+ sudo systemctl status {fastapi_demo}
+
+
+if all okay then check application 
+
+curl --unix-socket {/home/ubuntu/fastapi_sqlalchemy/}gunicorn.sock http://localhost/
+
+#nginx
+ sudo apt update
+ sudo apt install nginx
+
+ sudo nano /etc/nginx/sites-available/{fastapi_demo}
+
+ sudo systemctl reload nginx
+
+
+
+
+
+Activate vhost configuration
+
+Add a soft link of the vhost file in the sites-enabled directory.
+
+ $ sudo ln -s /etc/nginx/sites-available/fastapi_demo /etc/nginx/sites-enabled/
+Test and reload the configuration
+
+Test the configuration.
+
+ $ sudo nginx -t
+Expected output:
+
+ nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+ nginx: configuration file /etc/nginx/nginx.conf test is successful
+Reload Nginx.
+
+ $ sudo systemctl reload nginx
+Secure Nginx with an SSL Certificate
+An SSL Certificate is used to encrypt the traffic between users and the origin server. It is essential for applications dealing with sensitive data. We will use Let's Encrypt to obtain an SSL Certificate for free. Please make sure you have pointed your domain to the server's public IP.
+
+Install Certbot
+
+ $ sudo apt install -y certbot python3-certbot-nginx
+Install Certificate on Nginx
+
+You will be asked to enter your email address when you run the following command. Please enter your email address and leave the rest set as default.
+
+ $ sudo certbot --nginx -d your_domain -d www.your_domain
+Verify the Accessibility
+
+You can verify if the SSL Certificate is configured properly or not by opening the following link in your web browser.
+
+ https://your_domain
+Test Auto-Renewal
+
+Let's Encrypt certificates are only valid for 90 days, but certbot will handle auto-renewals. You can verify if the auto-renewal works by running the following command:
+
+ $ sudo certbot renew --dry-run
+If the above command doesn't throw an error, it means your SSL certificate will be renewed automatically without any issues.
