@@ -11,7 +11,7 @@ class DbListController:
     def dblist(self):
         try:
           
-          #here we are access dev databases
+          #here we are access dev databases here we are using
           with DevDbSession() as session:
             result = session.query(User1).all()
             return jsonable_encoder(result)
